@@ -1,0 +1,22 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+::selection {
+  color: red;
+}
+
+:root {
+  --fontSize: 1rem;
+  --mainColor: #12345678;
+}
+
+body {
+  color: var(--mainColor);
+  font-family: system-ui;
+  font-size: var(--fontSize);
+  line-height: calc(var(--fontSize) * 1.5);
+  overflow-wrap: break-word;
+  padding-inline: calc((var(--fontSize) / 2) + 1px);
+}
