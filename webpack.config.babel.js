@@ -7,6 +7,7 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 import CleanWebpackPlugin from 'clean-webpack-plugin';
 import cssnano from 'cssnano';
 import OptimizeCSSAssetsPlugin from 'optimize-css-assets-webpack-plugin';
+import Resolve from './resolve';
 
 const IS_PROD = process.env.NODE_ENV === 'production';
 
@@ -20,7 +21,7 @@ const config = {
     hot: true,
     inline: true,
     index: 'index.html',
-    open: true,
+    //open: true,
     stats: 'errors-only',
     watchContentBase: true
   },
@@ -40,8 +41,27 @@ const config = {
         loader: 'postcss-loader',
         options: {
           plugins: [
-            require('stylelint'),
-            require('postcss-preset-env')
+            require('postcss-preset-env')({
+              stage: 2,
+              features: {
+                'nesting-rules': true,
+                'custom-selectors': true,
+              }
+            }),
+            require('postcss-mixins'),
+            require('postcss-each'),
+            require('postcss-simple-vars'),
+            require('postcss-functions')({
+              functions: {
+                power: (number, exponent) => Math.pow(number, exponent),
+                eval: (expression) => Resolve(expression),
+                precision: (number) => {
+                  return Math.round(number * 100) / 100
+                }
+              },
+            }),
+            require('postcss-math'),
+            require('stylelint')
           ]
         }
       }],
@@ -87,7 +107,8 @@ const config = {
     new HTMLWebpackPlugin({
       filename: 'index.html',
       title: 'Welcome to starter kit',
-      hash: true
+      hash: true,
+      template: './templates/index.html'
     }),
     new webpack.HotModuleReplacementPlugin({
 

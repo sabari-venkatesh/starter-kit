@@ -1,22 +1,84 @@
-* {
-  box-sizing: border-box;
-  margin: 0;
+@import "~normalize.css/normalize.css";
+$scaleFactor: 1.618; /* Golden section */
+$basefontSize: 14px;
+$baselineHeight: resolve($basefontSize * $scaleFactor);
+@custom-selector :--heading h1, h2, h3, h4, h5, h6;
+
+@define-mixin verticalRhythm $scale {
+  $factor: power($scaleFactor, $scale);
+  /* font-size: resolve(precision(resolve($basefontSize * $factor))); */
+  /* font-size: (resolve(strip($basefontSize) * $factor)); */
+  /* font-size: resolve($factor * 1rem);
+  line-height: resolve($scale * ceil($baselineHeight)); */
+  font-size: eval($basefontSize ^ $scaleFactor);
 }
 
-::selection {
-  color: red;
+h1 {
+  @mixin verticalRhythm 3;
 }
 
 :root {
-  --fontSize: 1rem;
-  --mainColor: #12345678;
+  --basefontSize: $basefontSize;
+  --lineHeight: resolve(ceil($baselineHeight));
+}
+
+html {
+  font-size: var(--basefontSize);
+  line-height: var(--lineHeight);
 }
 
 body {
-  color: var(--mainColor);
-  font-family: system-ui;
-  font-size: var(--fontSize);
-  line-height: calc(var(--fontSize) * 1.5);
-  overflow-wrap: break-word;
-  padding-inline: calc((var(--fontSize) / 2) + 1px);
+  font-size: 1rem;
+  background: linear-gradient(rgb(204, 204, 204) 1px, transparent 1px) left top / 1px var(--lineHeight);
 }
+
+:--heading {
+  margin-block: 0;
+}
+
+/* h1,
+.h1 {
+  @mixin font 3;
+} */
+
+@each $icon in foo, bar, baz {
+  .icon-$(icon) {
+    display: none;
+  }
+}
+
+/* @custom-media --viewport-medium (width <= 50rem);
+@custom-selector :--heading h1, h2, h3, h4, h5, h6;
+
+:root {
+  --basefontSize: 1rem;
+  --mainColor: #12345678;
+  --secondaryColor: lab(32.5 38.5 -47.6 / 90%);
+}
+
+html {
+  overflow: hidden auto;
+}
+
+@media (--viewport-medium) {
+  body {
+    color: var(--mainColor);
+    font-family: system-ui;
+    font-size: var(--basefontSize);
+    line-height: calc(var(--basefontSize) * 1.5);
+    overflow-wrap: break-word;
+    padding-inline: calc(var(--basefontSize) / 2 + 1px);
+  }
+}
+
+:--heading {
+  margin-block: 0;
+}
+
+a {
+  color: rebeccapurple;
+
+  &:hover {
+    color: color-mod(var(--secondaryColor) b(15%) a(75%));
+  }
+} */
